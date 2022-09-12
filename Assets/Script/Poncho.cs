@@ -14,6 +14,7 @@ namespace Script
         void Start()
         {
             ChangeColor(Colors.Green);
+            LoadingCard();
         }
 
         // Update is called once per frame
@@ -32,6 +33,11 @@ namespace Script
         {
             backgroundColor = backgroundColor == Colors.Green ? Colors.Red : Colors.Green;
             ChangeColor(backgroundColor);
+        }
+
+        public void LoadingCard()
+        {
+            EventHandler.CallCardLoadingAnimation();
         }
     }
 }
