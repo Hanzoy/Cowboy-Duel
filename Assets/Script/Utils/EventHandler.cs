@@ -11,4 +11,11 @@ public static class EventHandler
     {
         CardLoadingAnimation?.Invoke();
     }
+
+    public static event Action<bool> CardSettlement;
+
+    public static void CallCardSettlement(bool identical)
+    {
+        CardSettlement?.Invoke(identical);
+    }
 }
