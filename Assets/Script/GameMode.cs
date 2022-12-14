@@ -5,9 +5,12 @@ using UnityEngine;
 
 public abstract class GameMode
 {
+    protected const bool Myself = true;
+    protected const bool Other = false;
     public abstract CardType FindCardContent(int index);
     public abstract bool Contrast(int card1, int card2);
     public abstract void Settlement();
+    public abstract bool GetController();
 }
 
 public class OnlineMode : GameMode
@@ -26,17 +29,24 @@ public class OnlineMode : GameMode
     {
         throw new System.NotImplementedException();
     }
+
+    public override bool GetController()
+    {
+        throw new System.NotImplementedException();
+    }
 }
 
 public class OfflineMode : GameMode
 {
-    private CardType[] _cards;
+    private bool _controller;
+    private readonly CardType[] _cards;
 
     private int _count = 0;
     public OfflineMode()
     {
         _cards = new CardType[24];
         _InitCards();
+        _controller = Myself;
     }
     
     public override CardType FindCardContent(int index)
@@ -60,6 +70,12 @@ public class OfflineMode : GameMode
         Poncho poncho = GameObject.FindWithTag("Poncho").GetComponent<Poncho>();
         poncho.ChangeColor();
         poncho.AddClick();
+        _controller = !_controller;
+    }
+
+    public override bool GetController()
+    {
+        return _controller;
     }
 
     private void _InitCards(int defend = 2, int load = 3, int load3 = 1, int ricochet = 2, int shoot = 2,

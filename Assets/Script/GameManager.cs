@@ -49,4 +49,9 @@ public class GameManager
         _gameMode.Settlement();
 
     }
+
+    public bool ControllerIsMyself()
+    {
+        return _gameMode.GetController();
+    }
 }

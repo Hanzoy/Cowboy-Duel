@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Script;
 using UnityEngine;
 using Script.Utils;
 using UnityEngine.UIElements;
@@ -18,6 +19,7 @@ public class Card : MonoBehaviour
     
     public double flipHight;
     public double flipAnimationRate;
+    public double collectAnimationRate;
     private bool _onFlip = false;
     private bool _onHover;
     // Start is called before the first frame update
@@ -43,7 +45,9 @@ public class Card : MonoBehaviour
     {
         if (identical)
         {
-            
+            var target = GameManager.Instance().ControllerIsMyself() ? GameObject.Find("poncho/collection_target/myself").transform.position : GameObject.Find("poncho/collection_target/other").transform.position;
+
+            StartCoroutine(Collect(target));
         }
         else
         {
@@ -152,6 +156,22 @@ public class Card : MonoBehaviour
 
         gameObject.transform.position = start;
         gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
+
+    IEnumerator Collect(Vector3 target)
+    {
+        var position = gameObject.transform.position;
+        var direction = (target - position).normalized;
+        double now = 0;
+        while (now < 1)
+        {
+            double radio = now / 1.0;
+            gameObject.transform.position = position * (float)(1-radio) + target * (float)(radio);
+            now += collectAnimationRate;
+            yield return new WaitForFixedUpdate();
+        }
+        Init();
+        ChangeCardContent();
     }
     
     public void Hover()
